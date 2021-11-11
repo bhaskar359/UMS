@@ -42,3 +42,27 @@ exports.find = (req,res) => {
         });
     });
 }
+
+exports.form = (req,res) => {
+    res.render('adduser');
+}
+
+exports.create = (req,res) => {
+    // res.render('adduser');
+    const {first_name, last_name, email, phone, comments} = req.body;
+    pool.getConnection((err,connection) => {
+        if(err) throw err;
+        console.log('Connected as ID '+ connection.threadId);
+        let searchTerm = req.body.search;
+        connection.query('INSERT into user SET first_name=?, last_name=?, email=?, phone=?, comments=?',[first_name,last_name,email,phone,comments],(err,rows) => {
+            connection.release();
+            if(!err){
+                res.render('adduser',{alert : 'User added successfully'});
+            }
+            else{
+                console.log(err);
+            }
+            console.log("The data from the user table : \n",rows);  
+        });
+    });
+}
