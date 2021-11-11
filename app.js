@@ -28,8 +28,10 @@ pool.getConnection((err,connection) => {
     console.log('Connected as ID '+ connection.threadId);
 });
 
-app.get('',(req,res) => {
-    res.render('home');
-});
+const routes = require('./server/routes/user');
+app.use('/',routes);
+// app.get('', (req,res) => {
+//     res.render('home');
+// })
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
