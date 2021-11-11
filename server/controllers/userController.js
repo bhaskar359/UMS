@@ -102,3 +102,21 @@ exports.update = (req,res) => {
         });
     });
 }
+
+exports.delete = (req,res) => {
+    // res.render('edituser');
+    pool.getConnection((err,connection) => {
+        if(err) throw err;
+        console.log('Connected as ID '+ connection.threadId);
+        connection.query('DELETE  FROM user WHERE id = ?',[req.params.id], (err,rows) => {
+            connection.release();
+            if(!err){
+                res.redirect('/');
+            }
+            else{
+                console.log(err);
+            }
+            console.log("The data from the user table : \n",rows);  
+        });
+    });
+}
