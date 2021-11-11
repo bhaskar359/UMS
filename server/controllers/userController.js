@@ -66,3 +66,39 @@ exports.create = (req,res) => {
         });
     });
 }
+
+exports.edit = (req,res) => {
+    // res.render('edituser');
+    pool.getConnection((err,connection) => {
+        if(err) throw err;
+        console.log('Connected as ID '+ connection.threadId);
+        connection.query('SELECT *  FROM user WHERE id = ?',[req.params.id], (err,rows) => {
+            connection.release();
+            if(!err){
+                res.render('edituser',{ rows });
+            }
+            else{
+                console.log(err);
+            }
+            console.log("The data from the user table : \n",rows);  
+        });
+    });
+}
+
+exports.update = (req,res) => {
+    const {first_name, last_name, email, phone, comments} = req.body;
+    pool.getConnection((err,connection) => {
+        if(err) throw err;
+        console.log('Connected as ID '+ connection.threadId);
+        connection.query('UPDATE user SET first_name=?, last_name=?, email=?, phone=?, comments=? where id = ?',[first_name,last_name,email,phone,comments,req.params.id], (err,rows) => {
+            connection.release();
+            if(!err){
+                res.render('edituser',{alert : `${first_name} updated successfully` });
+            }
+            else{
+                console.log(err);
+            }
+            console.log("The data from the user table : \n",rows);  
+        });
+    });
+}
