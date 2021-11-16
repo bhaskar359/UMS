@@ -6,7 +6,7 @@ const mysql = require("mysql");
 require("dotenv").config();
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = 5000 || 3306;
 
 app.use(express.urlencoded({extended: true}));
 
@@ -30,8 +30,5 @@ pool.getConnection((err,connection) => {
 
 const routes = require('./server/routes/user');
 app.use('/',routes);
-// app.get('', (req,res) => {
-//     res.render('home');
-// })
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

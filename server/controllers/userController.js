@@ -111,7 +111,25 @@ exports.delete = (req,res) => {
         connection.query('DELETE  FROM user WHERE id = ?',[req.params.id], (err,rows) => {
             connection.release();
             if(!err){
+                let removedUser = encodeURIComponent('User successfully removed');
                 res.redirect('/');
+            }
+            else{
+                console.log(err);
+            }
+            console.log("The data from the user table : \n",rows);  
+        });
+    });
+}
+
+exports.viewall = (req,res) => {
+    pool.getConnection((err,connection) => {
+        if(err) throw err;
+        console.log('Connected as ID '+ connection.threadId);
+        connection.query('SELECT *  FROM user where id = ?', [req.params.id], (err,rows) => {
+            connection.release();
+            if(!err){
+                res.render('viewuser',{ rows });
             }
             else{
                 console.log(err);
